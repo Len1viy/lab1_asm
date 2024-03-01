@@ -25,33 +25,29 @@ div2:
 section .text
 global _start
 _start:
-	mov	eax, dword[c]
-	cdqe
-	mov	rcx, rax
-	mov	eax, dword[b]
-	cdqe
-	mov	rbx, rax
-	movzx	rbp, word[e]
-	movzx	rsi, byte[d]
-	mov	rax, qword[a]
-	mov	rdi, rax
-	imul	rdi, rbx
-	imul	rdi, rcx
-	mov	qword[proizv1], rdi
-	mov	rdi, rcx
-	imul	rdi, rbp
-	imul	rdi, rsi
-	mov	qword[proizv2], rdi
-	div	rbx
-	mov 	qword[div1], rax
-	mov 	rax, rcx
-	div	rsi
-	add	rax, qword[div1]
-	mov	qword[div2], rax
+	mov	ecx, dword[c]
+	movzx	edi, byte[d]
+	movzx	esi, word[e]
+	mov	eax, ecx
+	mul	edi
+	mul	esi
+	mov	dword[proizv2], eax
+	mov	rbp, qword[a]
+	mov	ebx, dword[b]
+	mov	rax, rbp
+	mul	ebx
+	mul	ecx
+	mov	qword[proizv1], rax
+	mov	rax, rbp
+	div	ebx
+	mov	qword[div1], rax
+	mov	eax, ecx
+	div	edi
+	add	eax, dword[div1]
+	mov	esp, eax
 	mov	rax, qword[proizv1]
 	sub	rax, qword[proizv2]
-	mov	rsi, qword[div2]
-	div	rsi
+	div	esp
 	mov	qword[res], rax
 	mov	eax, 60
 	mov	edi, 0
