@@ -17,21 +17,21 @@ e:
 section .text
 global _start
 _start:
-	mov	ecx, dword[c]
-	movzx	edi, byte[d]
-	movzx	esi, word[e]
-	cmp	edi, 0
-	je	zf
-	mov	eax, ecx
+	mov	ecx, dword[c] ; выгрузка c
+	movzx	edi, byte[d] ; выгрузка d
+	movzx	esi, word[e] ; выгрузка e
+	cmp	edi, 0 ; проверка на 0 d
+	je	zf 
+	mov	eax, ecx ; начало подсчета части c*d*e
 	cdqe
 	mul	edi
 	jc	cf
 	mul	esi
 	jc	cf
-	mov	r9d, eax
-	mov	rbp, qword[a]
+	mov	r9d, eax ; запись результата в r9d
+	mov	rbp, qword[a] ; начало подсчета части a*b*c
 	mov	ebx, dword[b]
-	cmp	ebx, 0
+	cmp	ebx, 0 
 	je	zf
 	mov	rax, rbp
 	mul	ebx
@@ -39,22 +39,22 @@ _start:
 	mul	ecx
 	jc	cf
 	mov	r8, rax
-	mov	rax, rbp
+	mov	rax, rbp ; начало деления a // b
 	div	ebx
 	
 	mov	r10, rax
-	mov	eax, ecx
+	mov	eax, ecx ; начало деления c // d 
 	cdqe
 	mov	rdx, 0
 	div	edi
-	add	rax, r10
+	add	rax, r10 ; a // b + c // d
 	cmp	rax, 0
 	je	zf
-	mov	rsp, rax
+	mov	rsp, rax 
 	mov	rax, r8
-	sub	rax, r9
+	sub	rax, r9 ; a*b*c  - c*d*e
 	jc	cf
-	div	rsp
+	div	rsp ; конечное деление
 	mov	qword[res], rax
 	mov	eax, 60
 	mov	edi, 0
